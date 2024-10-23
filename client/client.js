@@ -1,5 +1,6 @@
 import { io } from "socket.io-client";
 import readline from "readline";
+import chalk from "chalk";
 
 // Function to initialize readline interface
 function initializeReadline() {
@@ -18,11 +19,15 @@ function handleConnection(username) {
   });
 
   socket.on("connect", () => {
-    console.log(`[INFO]Connected to server as ${username}`);
+    console.log(`[INFO] Connected to server as ${username}`);
   });
 
   socket.on("message", (message) => {
     console.log(`${message}`);
+  });
+
+  socket.on("ai message", (message) => {
+    console.log(message);
   });
 
   socket.on("disconnect", () => {
