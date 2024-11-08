@@ -52,4 +52,4 @@ node --env-file .env client/client.js
 
 
 ## License
-    This project is licensed under the MIT License.
+This project is licensed under the MIT License.
