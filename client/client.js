@@ -3,16 +3,15 @@ import readline from "readline";
 import chalk from "chalk";
 
 // Function to initialize readline interface
-function initializeReadline() {
-  return readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-  });
-}
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+  prompt: ">",
+});
 
 // Function to handle connections
 function handleConnection(username) {
-  const socket = io("http://localhost:3000", {
+  const socket = io(process.env.SERVER_URL, {
     auth: {
       username: username,
     },
@@ -22,13 +21,8 @@ function handleConnection(username) {
     console.log(`[INFO] Connected to server as ${username}`);
   });
 
-  socket.on("message", (message) => {
-    console.log(`${message}`);
-  });
-
-  socket.on("ai message", (message) => {
-    console.log(message);
-  });
+  socket.on("message", (message) => console.log(message));
+  socket.on("ai message", (message) => console.log(chalk.blue(message)));
 
   socket.on("disconnect", () => {
     console.log("[INFO] Disconnected from server.");
@@ -36,7 +30,7 @@ function handleConnection(username) {
   });
 
   socket.on("connect_error", (err) => {
-    console.error(`Connection error: ${err.message}`);
+    console.error(chalk.red(`Connection error: ${err.message}`));
   });
 
   rl.on("line", (input) => {
@@ -50,10 +44,11 @@ function handleConnection(username) {
     console.log("Exiting chat.");
     socket.disconnect();
   });
+
+  process.on("SIGINT", () => rl.close());
 }
 
 // Prompt for username and start connection
-const rl = initializeReadline();
 rl.question("Enter your username: ", (username) => {
   handleConnection(username);
   rl.prompt();
