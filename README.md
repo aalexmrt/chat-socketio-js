@@ -1,4 +1,4 @@
-# CLI-Chat with AI
+# Chat on the CLI with AI
 
 This is a chat application that supports both real-time messaging and AI-based responses using Google Generative AI through a Socket.IO connection. It consists of a server for handling connections and AI interactions, and a client for user interfacing.
 
